@@ -3,46 +3,32 @@ $is_auth = rand(0, 1);
 
 $user_name = 'Sergey Yakimov';
 $user_image = 'img/user.jpg';
-$categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
+$categories = [
+    'boards' => 'Доски и лыжи',
+    'attachment' => 'Крепления',
+    'boots' => 'Ботинки',
+    'clothing' => 'Одежда',
+    'tools' => 'Инструменты',
+    'other' => 'Разное'
+];
 
 $ads_list = [
-	[
-		'name' => '2014 Rossignol District Snowboard',
-		'category' => 'Доски и лыжи',
-        'price' => 10999,
-        'url' => 'img/lot-1.jpg'
-	],
-	[
-		'name' => 'DC Ply Mens 2016/2017 Snowboard',
-		'category' => 'Доски и лыжи',
-        'price' => 159999,
-        'url' => 'img/lot-2.jpg'
+    'names' => [
+        '2014 Rossignol District Snowboard',
+        'DC Ply Mens 2016/2017 Snowboard',
+        'Крепления Union Contact Pro 2015 года размер L/XL',
+        'Ботинки для сноуборда DC Mutiny Charocal',
+        'Куртка для сноуборда DC Mutiny Charosal',
+        'Маска Oakley Canopy',
     ],
-    [
-        'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'category' => 'Крепления',
-        'price' => 8000,
-        'url' => 'img/lot-3.jpg'
-    ],
-    [
-        'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'category' => 'Ботинки',
-        'price' => 10999,
-        'url' => 'img/lot-4.jpg'
-    ],
-    [
-        'name' => 'Куртка для сноуборда DC Mutiny Charosal',
-        'category' => 'Одежда',
-        'price' => 7500,
-        'url' => 'img/lot-5.jpg'
-    ],
-    [
-        'name' => 'Маска Oakley Canopy',
-        'category' => 'Разное',
-        'price' => 5400,
-        'url' => 'img/lot-6.jpg'
-    ]
+    'categories' => ['Доски и лыжи', 'Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Разное'],
+    'prices' => [10999, 159999, 8000, 10999, 7500, 5400],
+    'urls' => ['img/lot-1.jpg', 'img/lot-2.jpg', 'img/lot-3.jpg', 'img/lot-4.jpg', 'img/lot-5.jpg', 'img/lot-6.jpg']
 ];
+function format_price($price) {
+    $integer_price = ceil($price);
+    return number_format($integer_price, 0, '.', ' ') . ' <b class="rub">р</b>';
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -74,6 +60,7 @@ $ads_list = [
             </div>
             <div class="user-menu__logged">
                 <p><?=htmlspecialchars($user_name);?></p>
+                <a href="#">Выйти</a>
             </div>
         <?php else:?>
             <ul class="user-menu__list">
@@ -94,8 +81,8 @@ $ads_list = [
         <h2 class="promo__title">Нужен стафф для катки?</h2>
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
-            <?php foreach($categories as $value):?>
-            <li class="promo__item promo__item--boards">
+            <?php foreach($categories as $key => $value):?>
+            <li class="promo__item promo__item--<?=$key;?>">
                 <a class="promo__link" href="pages/all-lots.html"><?=$value;?></a>
             </li>
             <?php endforeach;?>
@@ -106,18 +93,19 @@ $ads_list = [
             <h2>Открытые лоты</h2>
         </div>
         <ul class="lots__list">
-            <?php foreach($ads_list as $key => $value):?>
+            <?php $index = 0;
+            while($index < count($ads_list['names'])):?>
             <li class="lots__item lot">
                 <div class="lot__image">
-                    <img src="<?=$value['url'];?>" width="350" height="260" alt="">
+                    <img src="<?=$ads_list['urls'][$index];?>" width="350" height="260" alt="">
                 </div>
                 <div class="lot__info">
-                    <span class="lot__category"><?=$value['category'];?></span>
-                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=$value['name'];?></a></h3>
+                    <span class="lot__category"><?=$ads_list['categories'][$index];?></span>
+                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=htmlspecialchars($ads_list['names'][$index]);?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=$value['price'];?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?=format_price($ads_list['prices'][$index]); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
@@ -125,7 +113,8 @@ $ads_list = [
                     </div>
                 </div>
             </li>
-            <?php endforeach;?>
+            <?php $index++;
+            endwhile;?>
         </ul>
     </section>
 </main>
