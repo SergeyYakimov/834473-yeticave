@@ -1,5 +1,4 @@
 <?php
-$is_auth = rand(0, 1);
 
 $user = [
     'name' => 'Sergey Yakimov',
@@ -7,12 +6,30 @@ $user = [
 ];
 
 $categories = [
-    'boards' => 'Доски и лыжи',
-    'attachment' => 'Крепления',
-    'boots' => 'Ботинки',
-    'clothing' => 'Одежда',
-    'tools' => 'Инструменты',
-    'other' => 'Разное'
+    [
+        'name' => 'Доски и лыжи',
+        'alias' => 'boards'
+    ],
+    [
+        'name' => 'Крепления',
+        'alias' => 'attachment'
+    ],
+    [
+        'name' => 'Ботинки',
+        'alias' => 'boots'
+    ],
+    [
+        'name' => 'Одежда',
+        'alias' => 'clothing'
+    ],
+    [
+        'name' => 'Инструменты',
+        'alias' => 'tools'
+    ],
+    [
+        'name' => 'Разное',
+        'alias' => 'other'
+    ]
 ];
 
 $ads_list = [
@@ -55,7 +72,7 @@ $ads_list = [
 ];
 
 require_once('functions.php');
-$page_content = include_template('index.php', ['categories' => $categories, 'ads_list' => $ads_list]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Главная', 'user' => $user, 'is_auth' => $is_auth]);
+$page_content = include_template('index.php', ['categories' => $categories, 'ads_list' => $ads_list, 'timer' => get_time_till_tomorrow_midnight()]);
+$layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Главная', 'user' => $user]);
 print($layout_content);
 ?>

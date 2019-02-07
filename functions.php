@@ -20,4 +20,11 @@ function include_template($name, $data) {
 
     return $result;
 }
+
+function get_time_till_tomorrow_midnight() {
+    date_default_timezone_set("Asia/Irkutsk");
+    $diff_time = strtotime('tomorrow midnight') - time();
+    $format_time = gmdate("H:i", $diff_time);
+    return $format_time;
+}
 ?>
