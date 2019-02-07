@@ -22,7 +22,7 @@
         <a class="main-header__add-lot button" href="pages/add-lot.html">Добавить лот</a>
 
         <nav class="user-menu">
-        <?php if($is_auth === 1):?>
+        <?php if(count($user)):?>
             <div class="user-menu__image">
                 <img src="<?=$user['image'];?>" width="40" height="40" alt="Пользователь">
             </div>
@@ -52,7 +52,7 @@
         <ul class="nav__list container">
             <?php foreach($categories as $value):?>
             <li class="nav__item">
-                <a href="pages/all-lots.html"><?=$value;?></a>
+                <a href="pages/all-lots.html"><?=$value['name'];?></a>
             </li>
             <?php endforeach;?>
         </ul>
