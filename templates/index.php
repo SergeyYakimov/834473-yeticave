@@ -14,7 +14,7 @@
         <h2>Открытые лоты</h2>
     </div>
     <ul class="lots__list">
-        <?php foreach($ads_list as $key => $value):?>
+        <?php foreach($lots_list as $key => $value):?>
         <li class="lots__item lot">
             <div class="lot__image">
                 <img src="<?=$value['url'];?>" width="350" height="260" alt="">
@@ -28,7 +28,7 @@
                         <span class="lot__cost"><?=format_price($value['price']);?></span>
                     </div>
                     <div class="lot__timer timer">
-                        <?=$timer; ?>
+                        <?=get_time_till_closing_time($closing_time); ?>
                     </div>
                 </div>
             </div>
