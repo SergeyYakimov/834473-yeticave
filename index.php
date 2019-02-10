@@ -1,5 +1,9 @@
 <?php
 
+require_once('functions.php');
+
+date_default_timezone_set("Asia/Irkutsk");
+
 $user = [
     'name' => 'Sergey Yakimov',
     'image' => 'img/user.jpg'
@@ -32,7 +36,7 @@ $categories = [
     ]
 ];
 
-$ads_list = [
+$lots_list = [
 	[
 		'name' => '2014 Rossignol District Snowboard',
 		'category' => 'Доски и лыжи',
@@ -71,8 +75,7 @@ $ads_list = [
     ]
 ];
 
-require_once('functions.php');
-$page_content = include_template('index.php', ['categories' => $categories, 'ads_list' => $ads_list, 'timer' => get_time_till_tomorrow_midnight()]);
+$page_content = include_template('index.php', ['categories' => $categories, 'lots_list' => $lots_list, 'closing_time' => strtotime('tomorrow midnight')]);
 $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Главная', 'user' => $user]);
 print($layout_content);
 ?>
