@@ -107,7 +107,3 @@ UPDATE lots SET title = 'Just a super mask' WHERE lot_id = 6;
 SELECT * FROM rates
 WHERE lot_id = 2
 ORDER BY date DESC;
-
-
-
-
