@@ -5,53 +5,45 @@ CREATE DATABASE yeticave
 USE yeticave;
 
 CREATE TABLE categories (
-  id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  name VARCHAR (128) NOT NULL,
-  class VARCHAR (128) NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE INDEX name (name),
-  UNIQUE INDEX class (class)
+  category_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR (128) NOT NULL UNIQUE,
+  alias VARCHAR (128) NOT NULL UNIQUE
 );
 
 CREATE TABLE users (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  email VARCHAR (128) NOT NULL,
+  user_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR (128) NOT NULL UNIQUE,
   name VARCHAR (50) NOT NULL,
   password VARCHAR (64) NOT NULL,
-  date_reg DATETIME NOT NULL,
+  date_reg TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   avatar VARCHAR (64),
-  contact_information VARCHAR (255) NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE INDEX email (email)
+  contact_information VARCHAR (255) NOT NULL
 );
 
 CREATE TABLE lots (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  lot_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  name VARCHAR (128) NOT NULL,
+  title VARCHAR (128) NOT NULL,
   description VARCHAR (255) NOT NULL,
   image VARCHAR (64) NOT NULL,
   start_price INT UNSIGNED NOT NULL,
-  completion_date DATETIME NOT NULL,
+  completion_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   step_rate INT UNSIGNED NOT NULL,
-  id_author INT UNSIGNED NOT NULL,
-  id_winner INT UNSIGNED,
-  id_category TINYINT UNSIGNED NOT NULL,
-  PRIMARY KEY (id),
-  FOREIGN KEY (id_category) REFERENCES categories (id),
-  FOREIGN KEY (id_author) REFERENCES users (id),
-  FOREIGN KEY (id_winner) REFERENCES users (id),
-  INDEX name_lot (name),
-  INDEX description_lot (description)
+  author_id INT UNSIGNED NOT NULL,
+  winner_id INT UNSIGNED,
+  category_id SMALLINT UNSIGNED NOT NULL,
+  FOREIGN KEY (category_id) REFERENCES categories (category_id),
+  FOREIGN KEY (author_id) REFERENCES users (user_id),
+  FOREIGN KEY (winner_id) REFERENCES users (user_id),
+  FULLTEXT INDEX title_description_ft_idx (title,description)
 );
 
 CREATE TABLE rates (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  rate_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   rate INT UNSIGNED NOT NULL,
-  id_user INT UNSIGNED NOT NULL,
-  id_lot INT UNSIGNED NOT NULL,
-  PRIMARY KEY (id),
-  FOREIGN KEY (id_user) REFERENCES users (id),
-  FOREIGN KEY (id_lot) REFERENCES lots (id)
+  user_id INT UNSIGNED NOT NULL,
+  lot_id INT UNSIGNED NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (user_id),
+  FOREIGN KEY (lot_id) REFERENCES lots (lot_id)
 );
