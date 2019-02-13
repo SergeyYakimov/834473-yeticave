@@ -88,15 +88,16 @@ INSERT INTO rates (date, rate, user_id, lot_id) VALUES
 SELECT * FROM categories;
 
 -- Получение самых новых, открытых лотов
-SELECT title, start_price, image, r.rate price, c.name FROM lots
+SELECT title, start_price, image, COALESCE(MAX(r.rate), start_price) AS price, c.name FROM lots
 JOIN categories c USING (category_id)
 LEFT JOIN rates r USING (lot_id)
-WHERE winner_id IS NULL
+WHERE completion_date > NOW()
+GROUP BY lot_id
 ORDER BY creation_date DESC
 LIMIT 3;
 
 -- Получение лота по его ID
-SELECT *, c.name FROM lots
+SELECT * FROM lots
 JOIN categories c USING (category_id)
 WHERE lot_id = 1;
 
