@@ -2,13 +2,17 @@
 
 require_once('init.php');
 
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-} else {
+function show_error ($categories, $user) {
     header("HTTP/1.0 404 Not Found");
     $page_content = include_template('error.php', ['categories' => $categories]);
     $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => '404 - Страница не найдена', 'user' => $user]);
     print($layout_content);
+}
+
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+} else {
+    show_error($categories, $user);
     die();
 }
 
@@ -20,10 +24,7 @@ $sql_lot = "SELECT lot_id, description, step_rate, completion_date, title, start
 $result_lot = mysqli_query($link, $sql_lot);
 
 if (!mysqli_num_rows($result_lot)) {
-    header("HTTP/1.0 404 Not Found");
-    $page_content = include_template('error.php', ['categories' => $categories]);
-    $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => '404 - Страница не найдена', 'user' => $user]);
-    print($layout_content);
+    show_error($categories, $user);
     die();
 }
 
