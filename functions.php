@@ -44,13 +44,4 @@ function remove_image($path, $tmp_name) {
     return $new_path;
 }
 
-function set_difference_in_days($date) {
-    $timestamp_lot = strtotime($date);
-    $passed_secs = $timestamp_lot - strtotime('now');
-    $days = floor($passed_secs / 86400);
-    if ($days > 0) {
-        return true;
-    }
-    return false;
-}
 ?>

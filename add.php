@@ -3,22 +3,10 @@
 require_once('init.php');
 require_once('functions.php');
 
-define('PERMIT_MIME_TYPES', ['image/pjpeg', 'image/jpeg', 'image/png']);
+$mime_types = ['image/pjpeg', 'image/jpeg', 'image/png'];
 
-define(
-    'ADD_LOT',
-    "INSERT INTO lots (
-        title,
-        description,
-        image,
-        start_price,
-        completion_date,
-        step_rate,
-        category_id,
-        author_id
-    )
-    VALUES (?, ?, ?, ?, ?, ?, ?, 1)"
-);
+$add = "INSERT INTO lots (title, description, image, start_price, completion_date, step_rate, category_id, author_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
 
 $dict = [
     'lot-name' => 'Название',
@@ -56,13 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $date_regexp = '/\d{2}.\d{2}.\d{4}/';
-    if (!preg_match($date_regexp, $lot['lot-date'])) {
-        $errors['lot-date'] = 'Введите дату окончания лота в формате ДД.ММ.ГГГГ';
+    if( ($lot['lot-date']) !== date('Y-m-d', strtotime($lot['lot-date'])) || strtotime($lot['lot-date']) < strtotime('tomorrow')) {
+        $errors['lot-date'] = 'Введите корректную дату завершения торгов, которая позже текущей даты хотя бы на один день';
     }
-    if (!set_difference_in_days($lot['lot-date'])) {
-        $errors['lot-date'] = 'Дата завершения должна быть хотя бы на день больше текущей';
-    }
+
 
 
     if($_FILES['lot_img']['name']) {
@@ -70,11 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $path = $_FILES['lot_img']['name'];
         $file_type = mime_content_type($tmp_name);
 
-        if(!array_search($file_type, PERMIT_MIME_TYPES)) {
+        if(!array_search($file_type, $mime_types)) {
             $errors['image'] = 'Загрузите картинку лота в формате PNG или JPEG';
         }
     } else {
-        $errors['image'] = 'Вы не загрузили изображение лота';
+        $errors['image'] = 'Нет изображения лота';
     }
     if(!$errors) {
         $tmp_name = $_FILES['lot_img']['tmp_name'];
@@ -87,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result_id) {
             $category_id = mysqli_fetch_assoc($result_id);
-            $stmt = db_get_prepare_stmt($link, ADD_LOT, [
+            $stmt = db_get_prepare_stmt($link, $add, [
                                $lot['lot-name'],
                                $lot['message'],
                                $lot['image'],

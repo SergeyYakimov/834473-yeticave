@@ -19,7 +19,7 @@ $date = $_POST['lot-date'] ?? '';
 <form class="form form--add-lot container <?php if($errors): ?>form--invalid<?php endif; ?>" enctype="multipart/form-data" action="../add.php" method="post">
     <h2>Добавление лота</h2>
     <div class="form__container-two">
-<div class="form__item <?php if(isset($errors['lot-name'])): ?>form__item--invalid<?php endif; ?>">
+        <div class="form__item <?php if(isset($errors['lot-name'])): ?>form__item--invalid<?php endif; ?>">
           <label for="lot-name">Наименование</label>
           <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?=$name; ?>" required>
           <?php if(isset($errors['lot-name'])): ?>
@@ -75,12 +75,9 @@ $date = $_POST['lot-date'] ?? '';
             <span class="form__error"><?=$errors['image'];?></span>
           <?php endif; ?>
         </div>
-        <?php if(isset($errors['lot_img'])):?>
-        <span class="form__error"><?=$errors['lot_img'];?></span>
-        <?php endif; ?>
     </div>
     <div class="form__container-three">
-<div class="form__item form__item--small <?php if(isset($errors['lot-rate'])): ?> form__item--invalid<?php endif; ?>">
+        <div class="form__item form__item--small <?php if(isset($errors['lot-rate'])): ?> form__item--invalid<?php endif; ?>">
           <label for="lot-rate">Начальная цена</label>
           <input id="lot-rate" type="number" name="lot-rate" placeholder="0" value="<?=$start_rate;?>"required>
           <?php if(isset($errors['lot-rate'])):?>
@@ -105,7 +102,7 @@ $date = $_POST['lot-date'] ?? '';
     <?php if($errors): ?>
     <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
     <ol>
-        <?php foreach($errors as $error => $val):?>
+        <?php foreach($errors as $error => $val): ?>
             <li><?=$dict[$error];?> : <?=$val?></li>
         <?php endforeach;?>
     </ol>
