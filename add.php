@@ -44,6 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    if (empty($errors['category'])) {
+        $value = intval($lot['category']);
+        if ($value <= 0 || $value > count($categories)) {
+            $errors['category'] = 'Выберите категорию';
+        }
+    }
+
     if (empty($errors['lot-name']) && strlen($lot['lot-name']) > $max_length_title) {
         $errors['lot-name'] = 'Слишком длинное наименование. Максимальное количество символов - ' . $max_length_title;
     }
@@ -93,23 +100,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         move_uploaded_file($_FILES['lot_img']['tmp_name'], 'img/' . $file_name);
         $lot['lot_img'] = 'img/' . $file_name;
 
-        $id = $lot['category'];
-        $sql_id = "SELECT category_id FROM categories WHERE `name` = '$id'";
-        $result_id = mysqli_query($link, $sql_id);
 
-
-        if ($result_id) {
-            $category_id = mysqli_fetch_assoc($result_id);
-            $stmt = db_get_prepare_stmt($link, $add, [
-                               $lot['lot-name'],
-                               $lot['message'],
-                               $lot['lot_img'],
-                               intval($lot['lot-rate']),
-                               $lot['lot-date'],
-                               intval($lot['lot-step']),
-                               intval($category_id)]);
-            $is_add = mysqli_stmt_execute($stmt);
-        }
+        $stmt = db_get_prepare_stmt($link, $add, [
+                            $lot['lot-name'],
+                            $lot['message'],
+                            $lot['lot_img'],
+                            intval($lot['lot-rate']),
+                            $lot['lot-date'],
+                            intval($lot['lot-step']),
+                            intval($lot['category'])]);
+        $is_add = mysqli_stmt_execute($stmt);
 
         if($is_add) {
             $lot_id = mysqli_insert_id($link);
