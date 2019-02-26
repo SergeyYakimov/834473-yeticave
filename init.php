@@ -6,7 +6,8 @@ date_default_timezone_set("Asia/Irkutsk");
 
 $user = [
     'name' => 'Sergey Yakimov',
-    'image' => 'img/user.jpg'
+    'image' => 'img/user.jpg',
+    'user_id' => 1
 ];
 
 $link = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);

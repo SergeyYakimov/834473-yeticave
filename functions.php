@@ -37,11 +37,4 @@ function get_time_till_closing_time($closing_time) {
     return $format_time;
 }
 
-function remove_image($path, $tmp_name) {
-    $path = pathinfo($path);
-    $new_path = 'img/' . uniqid() . '.' . $path['extension'];
-    move_uploaded_file($tmp_name, $new_path);
-    return $new_path;
-}
-
 ?>
