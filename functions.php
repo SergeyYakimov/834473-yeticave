@@ -1,4 +1,6 @@
 <?php
+require_once('mysql_helper.php');
+
 function format_price($price) {
     $integer_price = ceil($price);
     return number_format($integer_price, 0, '.', ' ') . '<b class="rub">р</b>';
@@ -34,4 +36,5 @@ function get_time_till_closing_time($closing_time) {
     }
     return $format_time;
 }
+
 ?>
