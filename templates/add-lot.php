@@ -1,6 +1,5 @@
 <?php
 $name = $_POST['lot-name'] ?? '';
-$category = $_POST['category'] ?? '';
 $message = $_POST['message'] ?? '';
 $image = $_POST['lot_img'] ?? '';
 $start_rate = $_POST['lot-rate'] ?? '';
@@ -26,18 +25,14 @@ $date = $_POST['lot-date'] ?? '';
           <span class="form__error">Введите наименование лота</span>
           <?php endif; ?>
         </div>
-        <div class="form__item <?php if(isset($errors['category'])): ?>form__item--invalid<?php endif; ?>">
-          <label for="category">Категория</label>
-          <select id="category" name="category" value="<?=$value['name'];?>" required>
-            <option>Выберите категорию</option>
-            <?php foreach($categories as $value):?>
-            <?php if($category === $value['name']): ?>
-              <option value="<?=$value['category_id'];?>" selected><?=$value['name'];?></option>
-              <?php else: ?>
-              <option value="<?=$value['category_id'];?>"><?=$value['name']; ?></option>
-              <?php endif; ?>
-            <?php endforeach;?>
-          </select>
+        <div class="form__item<?=!isset($errors['category']) ? '' : ' form__item--invalid'; ?>">
+            <label for="category">Категория</label>
+            <select id="category" name="category" required>
+                <option value="" selected disabled>Выберите категорию</option>
+                <?php foreach ($categories as $category): ?>
+                <option value="<?=$category['category_id']; ?>"<?=(!empty($lot['category']) && $lot['category'] === $category['category_id']) ? ' selected' : ''; ?>><?=$category['name']; ?></option>
+                <?php endforeach; ?>
+            </select>
           <?php if(isset($errors['category'])): ?>
           <span class="form__error">Выберите категорию</span>
           <?php endif; ?>

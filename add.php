@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$add_lot = include_template('add-lot.php', ['categories' => $categories, 'errors' => $errors, 'dict' => $dict]);
+$add_lot = include_template('add-lot.php', ['categories' => $categories, 'errors' => $errors, 'dict' => $dict, 'lot' => $lot]);
 $page = include_template('layout.php', ['content' => $add_lot, 'categories' => $categories, 'name_page' => 'Добавление лота', 'user' => $user,]);
 print($page);
 ?>
