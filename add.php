@@ -115,12 +115,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $lot_id = mysqli_insert_id($link);
             header('Location: lot.php?id=' . $lot_id);
             die();
-        } else {
-            header("HTTP/1.0 404 Not Found");
-            $fail_content = include_template('error.php', ['categories' => $categories]);
-            $page = include_template('layout.php', ['content' => $fail_content, 'categories' => $categories, 'name_page' => 'Ошибка', 'user' => $user]);
-            die();
         }
+        header("HTTP/1.0 404 Not Found");
+        $fail_content = include_template('error.php', ['categories' => $categories]);
+        $page = include_template('layout.php', ['content' => $fail_content, 'categories' => $categories, 'name_page' => 'Ошибка', 'user' => $user]);
+        die();
+
     }
 }
 

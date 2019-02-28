@@ -37,4 +37,15 @@ function get_time_till_closing_time($closing_time) {
     return $format_time;
 }
 
+function is_registered_email($link, $email) {
+    $result = 0;
+    $sql = "SELECT user_id FROM users WHERE email = '$email'";
+    if ($sql_email = mysqli_query($link, $sql)) {
+        $result = mysqli_num_rows($sql_email);
+    }
+    else {
+        die('Возникла ошибка. Пожалуйста, попробуйте еще раз.');
+    }
+    return !($result === 0);
+}
 ?>
