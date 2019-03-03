@@ -10,7 +10,7 @@ if (isset($_GET['id'])) {
         'name' => 'Ошибка 404. Страница не найдена',
         'message' => 'Данной страницы не существует на сайте'
     ];
-    $page_content = include_template('error.php', ['categories' => $categories, 'error' => $error]);
+    $page_content = include_template('error.php', ['error' => $error]);
     $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => '404 - Страница не найдена', 'user' => $user,'is_main_page' => $is_main_page]);
     print($layout_content);
     die();
@@ -29,14 +29,14 @@ if (!mysqli_num_rows($result_lot)) {
         'name' => 'Ошибка 404. Страница не найдена',
         'message' => 'Данной страницы не существует на сайте'
     ];
-    $page_content = include_template('error.php', ['categories' => $categories, 'error' => $error]);
+    $page_content = include_template('error.php', ['error' => $error]);
     $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => '404 - Страница не найдена', 'user' => $user, 'is_main_page' => $is_main_page]);
     print($layout_content);
     die();
 }
 
 $lot = mysqli_fetch_assoc($result_lot);
-$page_content = include_template('lot.php', ['categories' => $categories, 'lot' => $lot]);
+$page_content = include_template('lot.php', ['lot' => $lot, 'user' => $user]);
 $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => $lot['title'], 'user' => $user, 'is_main_page' => $is_main_page]);
 print($layout_content);
 ?>

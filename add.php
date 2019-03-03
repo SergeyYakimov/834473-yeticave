@@ -3,12 +3,12 @@
 require_once('init.php');
 
 if (empty($user)) {
-    header("HTTP/1.1 401 Unauthorized");
+    header("HTTP/1.1 403 Forbidden");
     $error = [
-        'name' => 'Ошибка 401. Для доступа к странице требуется аутентификация',
+        'name' => 'Ошибка 403. Доступ запрещен. Требуется аутентификация',
         'message' => 'Доблять лоты могут только зарегистрированные пользователи. Пожалуйста, войдите в свой аккаунт или зарегистрируйтесь.'
     ];
-    $fail_content = include_template('error.php', ['categories' => $categories, 'error' => $error]);
+    $fail_content = include_template('error.php', ['error' => $error]);
     $page = include_template('layout.php', ['content' => $fail_content, 'categories' => $categories, 'name_page' => 'Ошибка','is_main_page' => $is_main_page]);
     print($page);
     die();
@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'name' => 'Ошибка 404. Страница не найдена',
             'message' => 'Данной страницы не существует на сайте'
         ];
-        $fail_content = include_template('error.php', ['categories' => $categories, 'error' => $error]);
+        $fail_content = include_template('error.php', ['error' => $error]);
         $page = include_template('layout.php', ['content' => $fail_content, 'categories' => $categories, 'name_page' => 'Ошибка', 'user' => $user,'is_main_page' => $is_main_page]);
         print($page);
         die();

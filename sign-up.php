@@ -98,8 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 $page_content = include_template('sign-up.php', [
     'errors' => $errors,
-    'information' => $information,
-    'categories' => $categories
+    'information' => $information
 ]);
 $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Регистрация', 'user' => $user, 'is_main_page' => $is_main_page]);
 print($layout_content);
