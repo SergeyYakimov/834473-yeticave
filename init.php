@@ -4,11 +4,8 @@ require_once('config/db.php');
 
 date_default_timezone_set("Asia/Irkutsk");
 
-$user = [
-    'name' => 'Sergey Yakimov',
-    'image' => 'img/user.jpg',
-    'user_id' => 1
-];
+session_start();
+$user = isset($_SESSION['user']) ? $_SESSION['user'] : [];
 
 $link = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
 mysqli_set_charset($link, "utf8");

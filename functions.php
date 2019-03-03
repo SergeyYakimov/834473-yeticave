@@ -37,4 +37,31 @@ function get_time_till_closing_time($closing_time) {
     return $format_time;
 }
 
+function is_registered_email($link, $email) {
+    $result = 0;
+    $sql = "SELECT user_id FROM users WHERE email = '$email'";
+    if ($sql_email = mysqli_query($link, $sql)) {
+        $result = mysqli_num_rows($sql_email);
+    }
+    else {
+        die('Возникла ошибка. Пожалуйста, попробуйте еще раз.');
+    }
+    return !($result === 0);
+}
+
+function identify_user($link, $object) {
+    $result = [];
+    $sql_object = '';
+    if (!empty($object)) {
+        $sql_object = "WHERE " . key($object) . "='" . current($object) . "'";
+    }
+    $sql_user = "SELECT * FROM users $sql_object";
+    if ($query_user = mysqli_query($link, $sql_user)) {
+        $result = empty($object) ? mysqli_fetch_all($query_user, MYSQLI_ASSOC) : mysqli_fetch_array($query_user, MYSQLI_ASSOC);
+    }
+    else {
+        die('Возникла ошибка. Пожалуйста, попробуйте еще раз.');
+    }
+    return $result;
+}
 ?>

@@ -6,8 +6,12 @@ if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 } else {
     header("HTTP/1.0 404 Not Found");
-    $page_content = include_template('error.php', ['categories' => $categories]);
-    $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => '404 - Страница не найдена', 'user' => $user]);
+    $error = [
+        'name' => 'Ошибка 404. Страница не найдена',
+        'message' => 'Данной страницы не существует на сайте'
+    ];
+    $page_content = include_template('error.php', ['categories' => $categories, 'error' => $error]);
+    $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => '404 - Страница не найдена', 'user' => $user,'is_main_page' => false]);
     print($layout_content);
     die();
 }
@@ -21,14 +25,18 @@ $result_lot = mysqli_query($link, $sql_lot);
 
 if (!mysqli_num_rows($result_lot)) {
     header("HTTP/1.0 404 Not Found");
-    $page_content = include_template('error.php', ['categories' => $categories]);
-    $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => '404 - Страница не найдена', 'user' => $user]);
+    $error = [
+        'name' => 'Ошибка 404. Страница не найдена',
+        'message' => 'Данной страницы не существует на сайте'
+    ];
+    $page_content = include_template('error.php', ['categories' => $categories, 'error' => $error]);
+    $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => '404 - Страница не найдена', 'user' => $user, 'is_main_page' => false]);
     print($layout_content);
     die();
 }
 
 $lot = mysqli_fetch_assoc($result_lot);
 $page_content = include_template('lot.php', ['categories' => $categories, 'lot' => $lot]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => $lot['title'], 'user' => $user]);
+$layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => $lot['title'], 'user' => $user, 'is_main_page' => false]);
 print($layout_content);
 ?>
