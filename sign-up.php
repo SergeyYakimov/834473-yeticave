@@ -17,8 +17,6 @@ $errors = [];
 
 $information = [];
 
-$add_user = "INSERT INTO users (email, name, password, avatar, contact_information) VALUES (?, ?, ?, ?, ?)";
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $keys = ['email', 'password', 'name', 'contacts'];
     $file_user_name = '';
@@ -70,17 +68,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if(empty($errors)) {
+        $information['password'] = password_hash($information['password'], PASSWORD_DEFAULT);
+
         if(!empty($file_user_name)) {
             move_uploaded_file($_FILES['avatar']['tmp_name'], 'avatars/' . $file_user_name);
             $information['avatar'] = 'avatars/' . $file_user_name;
+            $add_user = "INSERT INTO users (email, name, password, avatar, contact_information) VALUES (?, ?, ?, ?, ?)";
+            $stmt_user = db_get_prepare_stmt($link, $add_user, [
+                $information['email'],
+                $information['name'],
+                $information['password'],
+                $information['avatar'],
+                $information['contacts']]);
+        } else {
+            $add_user = "INSERT INTO users (email, name, password, contact_information) VALUES (?, ?, ?, ?)";
+            $stmt_user = db_get_prepare_stmt($link, $add_user, [
+                $information['email'],
+                $information['name'],
+                $information['password'],
+                $information['contacts']]);
         }
-        $information['password'] = password_hash($information['password'], PASSWORD_DEFAULT);
-        $stmt_user = db_get_prepare_stmt($link, $add_user, [
-            $information['email'],
-            $information['name'],
-            $information['password'],
-            $information['avatar'],
-            $information['contacts']]);
+
         $is_add_user = mysqli_stmt_execute($stmt_user);
         header("Location: login.php");
         exit();
