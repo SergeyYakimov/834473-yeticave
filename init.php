@@ -8,11 +8,14 @@ session_start();
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : [];
 
 $link = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
-mysqli_set_charset($link, "utf8");
 
 if (!$link) {
     exit("Извините, ведутся технические работы");
 }
+
+mysqli_set_charset($link, "utf8");
+
+$is_main_page = false;
 
 $categories = [];
 $sql_categories = "SELECT * FROM categories";

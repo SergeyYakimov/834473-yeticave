@@ -2,6 +2,8 @@
 
 require_once('init.php');
 
+$is_main_page = true;
+
 $lots_list = [];
 
 $sql_lots = "SELECT lot_id, title, start_price, image, completion_date, c.name FROM lots
@@ -15,6 +17,6 @@ if ($result_lots) {
 }
 
 $page_content = include_template('index.php', ['categories' => $categories, 'lots_list' => $lots_list]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Главная', 'user' => $user,'is_main_page' => true]);
+$layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Главная', 'user' => $user,'is_main_page' => $is_main_page]);
 print($layout_content);
 ?>
