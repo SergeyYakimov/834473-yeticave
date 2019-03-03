@@ -91,6 +91,6 @@ $page_content = include_template('sign-up.php', [
     'information' => $information,
     'categories' => $categories
 ]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Регистрация', 'user' => $user,]);
+$layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Регистрация', 'user' => $user, 'is_main_page' => false]);
 print($layout_content);
 ?>

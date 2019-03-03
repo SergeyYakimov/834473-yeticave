@@ -10,7 +10,7 @@ if (empty($user)) {
         'message' => 'Доблять лоты могут только зарегистрированные пользователи. Пожалуйста, войдите в свой аккаунт или зарегистрируйтесь.'
     ];
     $fail_content = include_template('error.php', ['categories' => $categories, 'error' => $error]);
-    $page = include_template('layout.php', ['content' => $fail_content, 'categories' => $categories, 'name_page' => 'Ошибка']);
+    $page = include_template('layout.php', ['content' => $fail_content, 'categories' => $categories, 'name_page' => 'Ошибка','is_main_page' => false]);
     print($page);
     die();
 }
@@ -124,13 +124,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'message' => 'Данной страницы не существует на сайте'
         ];
         $fail_content = include_template('error.php', ['categories' => $categories, 'error' => $error]);
-        $page = include_template('layout.php', ['content' => $fail_content, 'categories' => $categories, 'name_page' => 'Ошибка', 'user' => $user]);
+        $page = include_template('layout.php', ['content' => $fail_content, 'categories' => $categories, 'name_page' => 'Ошибка', 'user' => $user,'is_main_page' => false]);
         print($page);
         die();
     }
 }
 
 $add_lot = include_template('add-lot.php', ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
-$page = include_template('layout.php', ['content' => $add_lot, 'categories' => $categories, 'name_page' => 'Добавление лота', 'user' => $user,]);
+$page = include_template('layout.php', ['content' => $add_lot, 'categories' => $categories, 'name_page' => 'Добавление лота', 'user' => $user, 'is_main_page' => false]);
 print($page);
 ?>

@@ -52,6 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $page_content = include_template('login.php', ['errors' => $errors, 'information' => $information, 'categories' => $categories, 'is_error_authentication' => $is_error_authentication]);
-$layout_content = include_template('layout.php', ['name_page' => 'Вход', 'content' => $page_content, 'user' => $user,'categories' => $categories]);
+$layout_content = include_template('layout.php', ['name_page' => 'Вход', 'content' => $page_content, 'user' => $user,'categories' => $categories,'is_main_page' => false]);
 print($layout_content);
 ?>
