@@ -1,12 +1,3 @@
-<nav class="nav">
-    <ul class="nav__list container">
-        <?php foreach($categories as $value):?>
-        <li class="nav__item">
-          <a href="all-lots.html"><?=$value['name'];?></a>
-        </li>
-        <?php endforeach;?>
-    </ul>
-</nav>
 <section class="lot-item container">
     <h2><?=$lot['title']; ?></h2>
     <div class="lot-item__content">
@@ -18,6 +9,7 @@
           <p class="lot-item__description"><?=$lot['description']; ?></p>
         </div>
         <div class="lot-item__right">
+          <?php if(!empty($user)): ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
                 <?=get_time_till_closing_time($lot['completion_date']); ?>
@@ -32,6 +24,7 @@
               </div>
             </div>
           </div>
+          <?php endif;?>
         </div>
       </div>
 </section>

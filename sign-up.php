@@ -1,6 +1,5 @@
 <?php
 require_once('init.php');
-require_once('functions.php');
 
 if(!empty($user)) {
     header("Location: /");
@@ -90,15 +89,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         $is_add_user = mysqli_stmt_execute($stmt_user);
+        if (!$is_add_user) {
+            die('Произошла ошибка. Пожалуйста, попробуйте снова.');
+        }
         header("Location: login.php");
-        exit();
+        die();
     }
 }
 $page_content = include_template('sign-up.php', [
     'errors' => $errors,
-    'information' => $information,
-    'categories' => $categories
+    'information' => $information
 ]);
-$layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Регистрация', 'user' => $user, 'is_main_page' => false]);
+$layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Регистрация', 'user' => $user, 'is_main_page' => $is_main_page]);
 print($layout_content);
 ?>

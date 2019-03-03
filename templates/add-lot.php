@@ -6,15 +6,6 @@ $start_rate = $_POST['lot-rate'] ?? '';
 $step = $_POST['lot-step'] ?? '';
 $date = $_POST['lot-date'] ?? '';
 ?>
-<nav class="nav">
-    <ul class="nav__list container">
-        <?php foreach($categories as $value):?>
-        <li class="nav__item">
-          <a href="all-lots.html"><?=$value['name'];?></a>
-        </li>
-        <?php endforeach;?>
-    </ul>
-</nav>
 <form class="form form--add-lot container <?=($errors) ? "form--invalid" : "";?>" enctype="multipart/form-data" action="../add.php" method="post">
     <h2>Добавление лота</h2>
     <div class="form__container-two">

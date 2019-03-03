@@ -1,6 +1,5 @@
 <?php
 require_once('init.php');
-require_once('functions.php');
 
 if(!empty($user)) {
     header("Location: /");
@@ -35,11 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($errors['password'])) {
         if (!empty($user_information) && password_verify($information['password'], $user_information['password'])) {
-            $user['user_id'] = $user_information['user_id'];
-            $user['name'] = $user_information['name'];
-            $user['avatar'] = $user_information['avatar'];
+            $user = $user_information;
         }
         else {
+            $errors['password'] = 'Вы ввели неверный пароль';
             $is_error_authentication = true;
         }
     }
@@ -51,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$page_content = include_template('login.php', ['errors' => $errors, 'information' => $information, 'categories' => $categories, 'is_error_authentication' => $is_error_authentication]);
-$layout_content = include_template('layout.php', ['name_page' => 'Вход', 'content' => $page_content, 'user' => $user,'categories' => $categories,'is_main_page' => false]);
+$page_content = include_template('login.php', ['errors' => $errors, 'information' => $information, 'is_error_authentication' => $is_error_authentication]);
+$layout_content = include_template('layout.php', ['name_page' => 'Вход', 'content' => $page_content, 'user' => $user,'categories' => $categories,'is_main_page' => $is_main_page]);
 print($layout_content);
 ?>
