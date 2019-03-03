@@ -2,6 +2,11 @@
 require_once('init.php');
 require_once('functions.php');
 
+if(!empty($user)) {
+    header("Location: /");
+    die();
+}
+
 $min_length_password = 6;
 $max_length_password = 64;
 $max_length_name = 50;

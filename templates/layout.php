@@ -22,21 +22,21 @@
         <a class="main-header__add-lot button" href="../add.php">Добавить лот</a>
 
         <nav class="user-menu">
-        <?php if(count($user)):?>
+        <?php if(!empty($user)): ?>
             <div class="user-menu__image">
-                <img src="../<?=$user['image'];?>" width="40" height="40" alt="Пользователь">
+                <img src="../<?=empty($user['avatar']) ? 'img/user.jpg' : $user['avatar']; ?>" width="40" height="40" alt="Пользователь">
             </div>
             <div class="user-menu__logged">
-                <p><?=htmlspecialchars($user['name']);?></p>
-                <a href="#">Выйти</a>
+                <p><?=htmlspecialchars($user['name']); ?></p>
+                <a href="logout.php">Выйти</a>
             </div>
         <?php else:?>
             <ul class="user-menu__list">
                 <li class="user-menu__item">
-                    <a href="#">Регистрация</a>
+                    <a href="sign-up.php">Регистрация</a>
                 </li>
                 <li class="user-menu__item">
-                    <a href="#">Вход</a>
+                    <a href="login.php">Вход</a>
                 </li>
             </ul>
         <?php endif;?>

@@ -3,22 +3,17 @@
 require_once('init.php');
 require_once('functions.php');
 
+if (empty($user)) {
+    header("HTTP/1.1 401 Unauthorized");
+    die();
+}
+
 $mime_types = ['image/pjpeg', 'image/jpeg', 'image/png'];
 
 $author_id = $user['user_id'];
 
 $add = "INSERT INTO lots (title, description, image, start_price, completion_date, step_rate, category_id, author_id)
             VALUES (?, ?, ?, ?, ?, ?, ?, '$author_id')";
-
-$dict = [
-    'lot-name' => 'Название',
-    'category' => 'Категория',
-    'message' => 'Описание',
-    'lot_img' => 'Изображение',
-    'lot-rate' => 'Начальная цена',
-    'lot-step' => 'Шаг ставки',
-    'lot-date' => 'Дата окончания'
-];
 
 $max_length_title = 128;
 $max_length_description = 255;
@@ -124,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$add_lot = include_template('add-lot.php', ['categories' => $categories, 'errors' => $errors, 'dict' => $dict, 'lot' => $lot]);
+$add_lot = include_template('add-lot.php', ['categories' => $categories, 'errors' => $errors, 'lot' => $lot]);
 $page = include_template('layout.php', ['content' => $add_lot, 'categories' => $categories, 'name_page' => 'Добавление лота', 'user' => $user,]);
 print($page);
 ?>
