@@ -64,4 +64,66 @@ function identify_user($link, $object) {
     }
     return $result;
 }
+
+function get_rates($link, $lot_id) {
+    $result = [];
+    $sql_rates =
+        "SELECT date, rate, r.user_id, u.name AS user
+            FROM rates r
+            JOIN users u USING (user_id)
+            WHERE lot_id = $lot_id
+            ORDER BY date DESC";
+    if ($query_rates = mysqli_query($link, $sql_rates)) {
+        $result = mysqli_fetch_all($query_rates, MYSQLI_ASSOC);
+    } else {
+        die('Возникла ошибка. Пожалуйста, попробуйте еще раз.');
+    }
+    return $result;
+}
+
+function add_rate($link, $information) {
+    $rate_id = '';
+    $sql_rate = "INSERT INTO rates (rate, user_id, lot_id) VALUES (?, ?, ?)";
+    $stmt = db_get_prepare_stmt($link, $sql_rate, [
+        $information['cost'],
+        $information['user_id'],
+        $information['lot_id']
+    ]);
+    $result = mysqli_stmt_execute($stmt);
+    if ($result) {
+        $rate_id = mysqli_insert_id($link);
+    } else {
+        die('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
+    }
+    return $rate_id;
+}
+
+function get_rate_add_time($time) {
+    $add_time = strtotime($time);
+    $result = date('d.m.y в H:i', $add_time);
+    if ($add_time > time()) {
+        return 'Ошибка! Время превышает текущее значение времени';
+    }
+    $passed_seconds = time() - $add_time;
+    $passed_minutes = (int) floor(($passed_seconds % 3600) / 60);
+    $passed_hours = (int) floor(($passed_seconds % 86400) / 3600);
+    $passed_days = (int) floor($passed_seconds / 86400);
+
+    if ($add_time >= strtotime('yesterday')) {
+        $result = sprintf('Вчера в %s', date('H:i', $add_time));
+    }
+    if ($add_time >= strtotime('today')) {
+        $result = sprintf('Сегодня в %s', date('H:i', $add_time));
+    }
+    if ($passed_days === 0) {
+        if ($passed_hours === 0 && $passed_minutes === 0) {
+            $result = $passed_seconds <= 30 ? 'Только что' : 'Минута назад';
+        } else if ($passed_hours === 0) {
+            $result = $passed_minutes === 1 ? 'Минута назад' : sprintf('%d %s назад', $passed_minutes);
+        } else if ($passed_hours > 0 && $passed_hours <= 10) {
+            $result = $passed_hours === 1 ? 'Час назад' : sprintf('%d %s назад', $passed_hours);
+        }
+    }
+    return $result;
+}
 ?>
