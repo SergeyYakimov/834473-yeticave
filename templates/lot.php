@@ -41,7 +41,7 @@
                     <?php foreach ($rates as $rate): ?>
                     <tr class="history__item">
                         <td class="history__name"><?=htmlspecialchars($rate['user']); ?></td>
-                        <td class="history__price"><?=format_price($rate['rate']); ?></td>
+                        <td class="history__price"><?=$rate['rate']; ?>р.</td>
                         <td class="history__time"><?=get_rate_add_time($rate['date']); ?></td>
                     </tr>
                     <?php endforeach; ?>

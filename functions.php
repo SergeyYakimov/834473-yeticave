@@ -98,6 +98,30 @@ function add_rate($link, $information) {
     return $rate_id;
 }
 
+function set_format_phrase($value, $indicator) {
+    $result = '';
+
+    $indicators = [
+        'minute' => ['минута', 'минуты', 'минут'],
+        'hour' => ['час', 'часа', 'часов']
+    ];
+
+    if (!isset($indicators[$indicator])) {
+        return $result;
+    }
+
+    $remainder = $value % 10;
+
+    if ($remainder === 1) {
+        $result = $indicators[$indicator][0];
+    } else if ($remainder >= 2 && $remainder <= 4) {
+        $result = $indicators[$indicator][1];
+    } else {
+        $result = $indicators[$indicator][2];
+    }
+    return $result;
+}
+
 function get_rate_add_time($time) {
     $add_time = strtotime($time);
     $result = date('d.m.y в H:i', $add_time);
@@ -117,11 +141,11 @@ function get_rate_add_time($time) {
     }
     if ($passed_days === 0) {
         if ($passed_hours === 0 && $passed_minutes === 0) {
-            $result = $passed_seconds <= 30 ? 'Только что' : 'Минута назад';
+            $result = $passed_seconds <= 30 ? 'Меньше минуты назад' : 'Минуту назад';
         } else if ($passed_hours === 0) {
-            $result = $passed_minutes === 1 ? 'Минута назад' : sprintf('%d %s назад', $passed_minutes);
+            $result = $passed_minutes === 1 ? 'Минуту назад' : sprintf('%d %s назад', $passed_minutes, set_format_phrase($passed_minutes, 'minute'));
         } else if ($passed_hours > 0 && $passed_hours <= 10) {
-            $result = $passed_hours === 1 ? 'Час назад' : sprintf('%d %s назад', $passed_hours);
+            $result = $passed_hours === 1 ? 'Час назад' : sprintf('%d %s назад', $passed_hours, set_format_phrase($passed_hours, 'hour'));
         }
     }
     return $result;

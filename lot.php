@@ -18,7 +18,7 @@ if (isset($_GET['id'])) {
     die();
 }
 
-$sql_lot = "SELECT lot_id, description, step_rate, completion_date, title, start_price, image, COALESCE(MAX(r.rate), start_price) AS price, c.name FROM lots
+$sql_lot = "SELECT lot_id, description, step_rate, completion_date, title, author_id, start_price, image, COALESCE(MAX(r.rate), start_price) AS price, c.name FROM lots
             JOIN categories c USING (category_id)
             LEFT JOIN rates r USING (lot_id)
             WHERE lot_id = $id
@@ -42,6 +42,7 @@ $lot = mysqli_fetch_assoc($result_lot);
 $rates = get_rates($link, $lot['lot_id']);
 
 $show_add_rate_form = false;
+
 if ((time() <= strtotime($lot['completion_date'])) && !empty($user) && $user['user_id'] !== $lot['author_id']
     && (empty($rates) || $rates[0]['user_id'] !== $user['user_id'])) {
     $show_add_rate_form = true;
@@ -64,11 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors['cost'])) {
         if (!ctype_digit($information['cost']) || $information['cost'] <= 0) {
-            $errors['cost'] = 'Ставка должна быть положительным числом';
+            $errors['cost'] = 'Ставка должна быть целым положительным числом';
         } else if ($information['cost'] < $lot['price'] + $lot['step_rate']) {
             $errors['cost'] = 'Ставка должна быть не меньше минимально возможной';
         } else if ($information['cost'] - $lot['price'] > $max_step_rate) {
-            $errors['cost'] = 'Ставка слишком высока. Максимальный шаг ставки - ' . $max_step_rate . ' р';
+            $errors['cost'] = 'Ставка слишком большая. Максимальный шаг ставки - ' . $max_step_rate . ' р';
         }
     }
 
@@ -88,8 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $rate_id = add_rate($link, $information);
+        $show_add_rate_form = false;
 
-        var_dump($lot);
         $lot['price'] = $information['cost'];
         array_unshift($rates, [
             'date' => date('Y-m-d H:i:s'),
