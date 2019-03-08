@@ -7,7 +7,6 @@ if(!empty($user)) {
 }
 
 $information = [];
-$is_error_authentication = false;
 $errors = [];
 
 $user_information = [];
@@ -38,18 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         else {
             $errors['password'] = 'Вы ввели неверный пароль';
-            $is_error_authentication = true;
         }
     }
 
-    if(empty($errors) && !$is_error_authentication) {
+    if(empty($errors)) {
         $_SESSION['user'] = $user;
         header("Location: /");
         die();
     }
 }
 
-$page_content = include_template('login.php', ['errors' => $errors, 'information' => $information, 'is_error_authentication' => $is_error_authentication]);
+$page_content = include_template('login.php', ['errors' => $errors, 'information' => $information]);
 $layout_content = include_template('layout.php', ['name_page' => 'Вход', 'content' => $page_content, 'user' => $user,'categories' => $categories,'is_main_page' => $is_main_page]);
 print($layout_content);
 ?>

@@ -103,7 +103,8 @@ function set_format_phrase($value, $indicator) {
 
     $indicators = [
         'minute' => ['минута', 'минуты', 'минут'],
-        'hour' => ['час', 'часа', 'часов']
+        'hour' => ['час', 'часа', 'часов'],
+        'rate' => ['ставка', 'ставки', 'ставок'],
     ];
 
     if (!isset($indicators[$indicator])) {
@@ -149,5 +150,111 @@ function get_rate_add_time($time) {
         }
     }
     return $result;
+}
+
+function get_categories($link, $category) {
+    $result = [];
+    $sql_category = '';
+    if (!empty($category)) {
+        $sql_category = "WHERE " . key($category) . "='" . current($category) . "'";
+    }
+    $sql = "SELECT * FROM categories $sql_category";
+
+    if ($query = mysqli_query($link, $sql)) {
+        $result = empty($category) ? mysqli_fetch_all($query, MYSQLI_ASSOC) : mysqli_fetch_array($query, MYSQLI_ASSOC);
+    } else {
+        die('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
+    }
+    return $result;
+}
+
+function get_lots($link, $limit, $search = false, $category_id = false, $page_id = false, $records = false) {
+    $result = [];
+    $count = 0;
+
+    $filter_by_category = empty($category_id) ? '' : 'AND c.category_id = ' . $category_id;
+    $search_filter = empty($search) ? '' : "AND MATCH (title, description) AGAINST ('" . $search . "')";
+    $limit_filter = !empty($limit) ? 'LIMIT ' . $limit : '';
+    $offset_filter = !empty($page_id) && !empty($limit) ? 'OFFSET ' . ($page_id - 1) * $limit : '';
+
+    $sql =
+        "SELECT lot_id, title, start_price, image, COUNT(r.rate_id) AS rates_count, COALESCE(MAX(r.rate),start_price) AS price, completion_date
+            FROM lots l
+            LEFT JOIN rates r USING (lot_id)
+            JOIN categories c USING (category_id)
+            WHERE l.completion_date > NOW() $filter_by_category $search_filter
+            GROUP BY l.lot_id
+            ORDER BY l.creation_date DESC
+            $limit_filter
+            $offset_filter";
+
+
+    if ($query = mysqli_query($link, $sql)) {
+        if ($records) {
+            $count = mysqli_num_rows($query);
+        } else {
+            $result = mysqli_fetch_all($query, MYSQLI_ASSOC);
+        }
+    } else {
+        die('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
+    }
+    return $records ? $count : $result;
+}
+
+function get_pagination_information($pages_count, $present_page, $search_information, $max_pages) {
+    $previous ='';
+    $next ='';
+
+    if ($pages_count <= 1) {
+        return [];
+    }
+
+    $max_pages = $pages_count < $max_pages ? $pages_count : $max_pages;
+    $pagination_information = [];
+
+    $left = $current_page - 1;
+    $right = $pages_count - $present_page;
+    $middle = (int) ceil($max_pages / 2);
+    $left_min = $middle - 1;
+    $right_min = $max_pages - $middle;
+
+    if ($present_page > 1) {
+        $search_information['page'] = $present_page - 1;
+        $previous = ' href="?' . http_build_query($search_information) . '"';
+    }
+    if ($present_page < $pages_count) {
+        $search_information['page'] = $present_page + 1;
+        $next = ' href="?' . http_build_query($search_information) . '"';
+    }
+
+    $pagination_information[0] = ['page_number' => 'Назад', 'class' => ' pagination-item-prev', 'href' => $previous];
+    $j = 1;
+
+    while ($j <= $max_pages) {
+        $page_number = $j;
+
+        if ($left > $left_min && $right > $right_min) {
+            $page_number = $j + $present_page - $middle;
+        } else if ($right <= $right_min) {
+            $page_number = $j + $pages_count - $max_pages;
+        }
+
+        $page_href = '';
+        $class = ' pagination-item-active';
+        if ($page_number !== $present_page) {
+            $search_information['page'] = $page_number;
+            $page_href = ' href="?' . http_build_query($search_information) . '"';
+            $class = '';
+        }
+        $pagination_information[$j] = [
+            'page_number' => $page_number,
+            'class' => $class,
+            'href' => $page_href
+        ];
+
+        $j++;
+    }
+    $pagination_information[$max_pages + 1] = ['page_number' => 'Вперед', 'class' => ' pagination-item-next', 'href' => $next];
+    return $pagination_information;
 }
 ?>
