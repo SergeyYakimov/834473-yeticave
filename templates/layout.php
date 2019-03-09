@@ -15,8 +15,11 @@
         <a class="main-header__logo" <?=$is_main_page ? '' : ' href="/"'; ?>>
             <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
         </a>
-        <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru">
-            <input type="search" name="search" placeholder="Поиск лота">
+        <form class="main-header__search" method="get" action="search.php">
+            <?php if (!empty($present_category)): ?>
+            <input type="text" name="category" value=<?=$present_category['category_id']; ?> hidden>
+            <?php endif; ?>
+            <input type="search" name="search" placeholder="Поиск лота <?=empty($present_category) ? $_GET['search'] : ' в категории «' . $present_category['name'] . '»'; ?>">
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
         </form>
         <a class="main-header__add-lot button" href="../add.php">Добавить лот</a>
@@ -50,11 +53,11 @@
     <main class="container">
         <nav class="nav">
             <ul class="nav__list container">
-                <?php foreach($categories as $value):?>
-                <li class="nav__item">
-                    <a href="all-lots.html"><?=$value['name'];?></a>
-                </li>
-                <?php endforeach;?>
+                <?php foreach ($categories as $value): ?>
+                    <li class="nav__item<?=(!empty($present_category) && $value['category_id'] === $present_category['category_id']) ? ' nav__item--current' : ''; ?>">
+                        <a href="all-lots.php?category=<?=$value['category_id']; ?>"><?=$value['name']; ?></a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         </nav>
         <?=$content; ?>
@@ -65,11 +68,11 @@
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <?php foreach($categories as $value):?>
-            <li class="nav__item">
-                <a href="pages/all-lots.html"><?=$value['name'];?></a>
-            </li>
-            <?php endforeach;?>
+            <?php foreach ($categories as $value): ?>
+                <li class="nav__item">
+                    <a href="all-lots.php?category=<?=$value['category_id']; ?>"><?=$value['name']; ?></a>
+                </li>
+            <?php endforeach; ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">

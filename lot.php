@@ -76,17 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $information['user_id'] = $user['user_id'];
         $information['lot_id'] = $lot['lot_id'];
-        if ((time() >= strtotime($lot['completion_date']))) {
-            header("HTTP/1.0 403 Forbidden");
-            $error = [
-                'name' => 'Ошибка 403. Действие запрещено',
-                'message' => 'Аукцион по данному лоту завершен'
-            ];
-            $page_content = include_template('error.php', ['error' => $error]);
-            $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => '403 - Действие запрещено', 'user' => $user,'is_main_page' => $is_main_page]);
-            print($layout_content);
-            die();
-        }
 
         $rate_id = add_rate($link, $information);
         $show_add_rate_form = false;

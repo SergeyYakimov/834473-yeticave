@@ -1,4 +1,4 @@
-<form class="form container<?=empty($errors) && !$is_error_authentication ? '' : ' form--invalid'; ?>" action="login.php" method="post">
+<form class="form container<?=empty($errors) ? '' : ' form--invalid'; ?>" action="login.php" method="post">
     <h2>Вход</h2>
     <div class="form__item<?=isset($errors['email']) ? ' form__item--invalid' : ''; ?>">
         <label for="email">E-mail*</label>
