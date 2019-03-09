@@ -105,6 +105,7 @@ function set_format_phrase($value, $indicator) {
         'minute' => ['минута', 'минуты', 'минут'],
         'hour' => ['час', 'часа', 'часов'],
         'rate' => ['ставка', 'ставки', 'ставок'],
+        'day' => ['день', 'дня', 'дней']
     ];
 
     if (!isset($indicators[$indicator])) {
@@ -257,4 +258,44 @@ function get_pagination_information($pages_count, $present_page, $search_informa
     $pagination_information[$max_pages + 1] = ['page_number' => 'Вперед', 'class' => ' pagination-item-next', 'href' => $next];
     return $pagination_information;
 }
+
+function get_user_rates($link, $user_id) {
+    $result = [];
+    $sql_user_rates =
+        "SELECT l.lot_id, l.title AS lot_title, l.completion_date AS lot_completion_date, MAX(rate) AS rate, MAX(r.date) AS date_add, l.winner_id, l.image, l.author_id AS author_id, c.name AS category, u.contact_information AS contacts
+            FROM rates r
+            JOIN lots l USING (lot_id)
+            JOIN categories c USING (category_id)
+            JOIN users u ON u.user_id = l.author_id
+            WHERE r.user_id = $user_id
+            GROUP BY l.lot_id, l.title, l.completion_date, l.image, l.author_id, l.winner_id, c.name, u.contact_information
+            ORDER BY date_add DESC";
+    if ($query = mysqli_query($link, $sql_user_rates)) {
+        $result = mysqli_fetch_all($query, MYSQLI_ASSOC);
+    } else {
+        die('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
+    }
+    return $result;
+}
+
+function get_time_of_end_lot ($time) {
+    $completion_time = strtotime($time);
+
+    $seconds = $completion_time - time();
+    $days = (int) floor($seconds / 86400);
+    $hours = (int) floor(($seconds % 86400) / 3600);
+    $minutes = (int) floor(($seconds % 3600) / 60);
+
+    $result = date('d.m.Y', $completion_time);
+
+    if ($seconds <= 0) {
+        $result = 'Торги окончены';
+    } else if ($days === 0) {
+        $result = sprintf('%02d:%02d', $hours, $minutes);
+    } else if ($days <= 7) {
+        $result = sprintf('%d %s', $days, set_format_phrase($days, 'day'));
+    }
+    return $result;
+}
+
 ?>
