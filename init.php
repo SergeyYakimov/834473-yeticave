@@ -4,6 +4,7 @@ require_once('config/db.php');
 
 date_default_timezone_set("Asia/Irkutsk");
 $search_page_limit_lots = 9;
+$all_lots_page_limit_lots = 9;
 
 session_start();
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : [];

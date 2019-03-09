@@ -53,11 +53,11 @@
     <main class="container">
         <nav class="nav">
             <ul class="nav__list container">
-                <?php foreach($categories as $value):?>
-                <li class="nav__item">
-                    <a href="all-lots.html"><?=$value['name'];?></a>
-                </li>
-                <?php endforeach;?>
+                <?php foreach ($categories as $value): ?>
+                    <li class="nav__item<?=(!empty($present_category) && $value['category_id'] === $present_category['category_id']) ? ' nav__item--current' : ''; ?>">
+                        <a href="all-lots.php?category=<?=$value['category_id']; ?>"><?=$value['name']; ?></a>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         </nav>
         <?=$content; ?>
@@ -68,11 +68,11 @@
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <?php foreach($categories as $value):?>
-            <li class="nav__item">
-                <a href="pages/all-lots.html"><?=$value['name'];?></a>
-            </li>
-            <?php endforeach;?>
+            <?php foreach ($categories as $value): ?>
+                <li class="nav__item">
+                    <a href="all-lots.php?category=<?=$value['category_id']; ?>"><?=$value['name']; ?></a>
+                </li>
+            <?php endforeach; ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">

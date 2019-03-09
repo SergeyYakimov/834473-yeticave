@@ -43,6 +43,7 @@ if (!empty($category_id)) {
 $pagination_information = get_pagination_information($pages_count, $page_id, $search_information, 9);
 
 $lots = get_lots($link, $limit, mysqli_real_escape_string($link, $search['text']), $category_id, $page_id);
+
 $page_content = include_template('search.php', ['search' => $search, 'lots' => $lots,'pagination_information' => $pagination_information, 'message' => 'Ничего не найдено по вашему запросу.']);
 $layout_content = include_template('layout.php', ['present_category' => $category,'content' => $page_content, 'categories' => $categories, 'name_page' => 'Результаты поиска', 'user' => $user, 'is_main_page' => $is_main_page]);
 print($layout_content);
