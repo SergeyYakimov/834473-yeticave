@@ -6,7 +6,7 @@ $limit = $search_page_limit_lots;
 $search = ['text' => '', 'category' => ''];
 
 if (!isset($_GET['search']) || empty(trim($_GET['search']))) {
-    if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'http://' . $_SERVER['SERVER_NAME']) === 0) {
+    if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], $_SERVER['SERVER_PROTOCOL'] . $_SERVER['SERVER_NAME']) === 0) {
         header("Location: " . $_SERVER['HTTP_REFERER']);
     } else {
         header("Location: /");

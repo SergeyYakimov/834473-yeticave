@@ -178,7 +178,7 @@ function get_lots($link, $limit, $search = false, $category_id = false, $page_id
     $offset_filter = !empty($page_id) && !empty($limit) ? 'OFFSET ' . ($page_id - 1) * $limit : '';
 
     $sql =
-        "SELECT lot_id, title, start_price, image, COUNT(r.rate_id) AS rates_count, COALESCE(MAX(r.rate),start_price) AS price, completion_date
+        "SELECT lot_id, title, start_price, image, COUNT(r.rate_id) AS rates_count, COALESCE(MAX(r.rate),start_price) AS price, completion_date, c.name AS category
             FROM lots l
             LEFT JOIN rates r USING (lot_id)
             JOIN categories c USING (category_id)
