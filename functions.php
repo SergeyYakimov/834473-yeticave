@@ -298,4 +298,20 @@ function get_time_of_end_lot ($time) {
     return $result;
 }
 
+function get_winner($link, $user) {
+    $result = [];
+    $sql = '';
+
+    if (!empty($user)) {
+        $sql = "WHERE " . key($user) . "='" . current($user) . "'";
+        $sql_winner = "SELECT * FROM users $sql";
+        if ($query = mysqli_query($link, $sql_winner)) {
+            $result = mysqli_fetch_array($query, MYSQLI_ASSOC);
+        } else {
+            die('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
+        }
+    }
+    return $result;
+}
+
 ?>

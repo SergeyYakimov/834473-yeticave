@@ -1,0 +1,15 @@
+{
+    "name": "sergeyyakimov/834473-yeticave",
+    "description": "Online auction for personal items",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "SergeyYakimov",
+            "email": "teriertis@yandex.ru"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.0"
+    }
+}

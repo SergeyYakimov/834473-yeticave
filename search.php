@@ -4,9 +4,10 @@ require_once('init.php');
 $limit = $search_page_limit_lots;
 
 $search = ['text' => '', 'category' => ''];
+$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
 
 if (!isset($_GET['search']) || empty(trim($_GET['search']))) {
-    if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], $_SERVER['SERVER_PROTOCOL'] . $_SERVER['SERVER_NAME']) === 0) {
+    if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], $protocol . $_SERVER['SERVER_NAME']) === 0) {
         header("Location: " . $_SERVER['HTTP_REFERER']);
     } else {
         header("Location: /");

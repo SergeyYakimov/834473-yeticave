@@ -1,6 +1,7 @@
 <?php
 
 require_once('init.php');
+require_once('getwinner.php');
 
 $is_main_page = true;
 
