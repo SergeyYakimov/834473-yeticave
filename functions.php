@@ -7,7 +7,8 @@ require_once('mysql_helper.php');
 * @return string Отформатированная цена в денежном формате
 */
 
-function format_price($price) {
+function format_price($price)
+{
     $integer_price = ceil($price);
     return number_format($integer_price, 0, '.', ' ') . '<b class="rub">р</b>';
 }
@@ -19,7 +20,8 @@ function format_price($price) {
 * @return string Готовая часть разметки страницы
 */
 
-function include_template($name, $data) {
+function include_template($name, $data)
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -42,13 +44,14 @@ function include_template($name, $data) {
 * @return string Отображение времени завершения лота в подобранном формате
 */
 
-function get_time_till_closing_time($closing_time) {
+function get_time_till_closing_time($closing_time)
+{
     $diff_time = strtotime($closing_time) - time();
     $sec_in_day = 86400;
     $num_days = $diff_time / $sec_in_day;
     if ($num_days > 3) {
         $format_time = gmdate("d.m.Y", strtotime($closing_time));
-    } else if ($num_days <= 3 && $num_days > 1) {
+    } elseif ($num_days <= 3 && $num_days > 1) {
         $format_time = floor($num_days) . (floor($num_days) > 1 ? ' дня' : ' день');
     } else {
         $format_time = gmdate("H:i", $diff_time);
@@ -63,13 +66,13 @@ function get_time_till_closing_time($closing_time) {
 * @return bool true - пользователь с указанным e-mail найден, false - не найден
 */
 
-function is_registered_email($link, $email) {
+function is_registered_email($link, $email)
+{
     $result = 0;
     $sql = "SELECT user_id FROM users WHERE email = '$email'";
     if ($sql_email = mysqli_query($link, $sql)) {
         $result = mysqli_num_rows($sql_email);
-    }
-    else {
+    } else {
         die('Возникла ошибка. Пожалуйста, попробуйте еще раз.');
     }
     return !($result === 0);
@@ -83,7 +86,8 @@ function is_registered_email($link, $email) {
  * @return array Массив данных пользователя
  */
 
-function identify_user($link, $object) {
+function identify_user($link, $object)
+{
     $result = [];
     $sql_object = '';
     if (!empty($object)) {
@@ -92,8 +96,7 @@ function identify_user($link, $object) {
     $sql_user = "SELECT * FROM users $sql_object";
     if ($query_user = mysqli_query($link, $sql_user)) {
         $result = empty($object) ? mysqli_fetch_all($query_user, MYSQLI_ASSOC) : mysqli_fetch_array($query_user, MYSQLI_ASSOC);
-    }
-    else {
+    } else {
         die('Возникла ошибка. Пожалуйста, попробуйте еще раз.');
     }
     return $result;
@@ -107,7 +110,8 @@ function identify_user($link, $object) {
  * @return array Массив ставок для конкретного лота
  */
 
-function get_rates($link, $lot_id) {
+function get_rates($link, $lot_id)
+{
     $result = [];
     $sql_rates =
         "SELECT date, rate, r.user_id, u.name AS user
@@ -131,7 +135,8 @@ function get_rates($link, $lot_id) {
  * @return integer id записанной строки
  */
 
-function add_rate($link, $information) {
+function add_rate($link, $information)
+{
     $rate_id = '';
     $sql_rate = "INSERT INTO rates (rate, user_id, lot_id) VALUES (?, ?, ?)";
     $stmt = db_get_prepare_stmt($link, $sql_rate, [
@@ -156,7 +161,8 @@ function add_rate($link, $information) {
  * @return string Наименование в правильном падеже
  */
 
-function set_format_phrase($value, $indicator) {
+function set_format_phrase($value, $indicator)
+{
     $result = '';
 
     $indicators = [
@@ -174,7 +180,7 @@ function set_format_phrase($value, $indicator) {
 
     if ($remainder === 1) {
         $result = $indicators[$indicator][0];
-    } else if ($remainder >= 2 && $remainder <= 4) {
+    } elseif ($remainder >= 2 && $remainder <= 4) {
         $result = $indicators[$indicator][1];
     } else {
         $result = $indicators[$indicator][2];
@@ -189,7 +195,8 @@ function set_format_phrase($value, $indicator) {
  * @return string Отформатированное время добавления ставки
  */
 
-function get_rate_add_time($time) {
+function get_rate_add_time($time)
+{
     $add_time = strtotime($time);
     $result = date('d.m.y в H:i', $add_time);
     if ($add_time > time()) {
@@ -209,9 +216,9 @@ function get_rate_add_time($time) {
     if ($passed_days === 0) {
         if ($passed_hours === 0 && $passed_minutes === 0) {
             $result = $passed_seconds <= 30 ? 'Меньше минуты назад' : 'Минуту назад';
-        } else if ($passed_hours === 0) {
+        } elseif ($passed_hours === 0) {
             $result = $passed_minutes === 1 ? 'Минуту назад' : sprintf('%d %s назад', $passed_minutes, set_format_phrase($passed_minutes, 'minute'));
-        } else if ($passed_hours > 0 && $passed_hours <= 10) {
+        } elseif ($passed_hours > 0 && $passed_hours <= 10) {
             $result = $passed_hours === 1 ? 'Час назад' : sprintf('%d %s назад', $passed_hours, set_format_phrase($passed_hours, 'hour'));
         }
     }
@@ -226,7 +233,8 @@ function get_rate_add_time($time) {
  * @return array Массив категорий
  */
 
-function get_categories($link, $category) {
+function get_categories($link, $category)
+{
     $result = [];
     $sql_category = '';
     if (!empty($category)) {
@@ -254,7 +262,8 @@ function get_categories($link, $category) {
  * @return array|integer Массив лотов|количество лотов
  */
 
-function get_lots($link, $limit, $search = false, $category_id = false, $page_id = false, $records = false) {
+function get_lots($link, $limit, $search = false, $category_id = false, $page_id = false, $records = false)
+{
     $result = [];
     $count = 0;
 
@@ -297,7 +306,8 @@ function get_lots($link, $limit, $search = false, $category_id = false, $page_id
  * @return array Двумерный массив данных, каждый элемент которого содержит номер страницы, css-класс каждого элемента списка и текст атрибута href
  */
 
-function get_pagination_information($pages_count, $present_page, $search_information, $max_pages) {
+function get_pagination_information($pages_count, $present_page, $search_information, $max_pages)
+{
     $previous ='';
     $next ='';
     if ($pages_count <= 1) {
@@ -324,7 +334,7 @@ function get_pagination_information($pages_count, $present_page, $search_informa
         $page_number = $i;
         if ($left > $left_min && $right > $right_min) {
             $page_number = $i + $present_page - $middle;
-        } else if ($right <= $right_min) {
+        } elseif ($right <= $right_min) {
             $page_number = $i + $pages_count - $max_pages;
         }
 
@@ -349,7 +359,8 @@ function get_pagination_information($pages_count, $present_page, $search_informa
  * @return array Массив ставок конкретного пользователя
  */
 
-function get_user_rates($link, $user_id) {
+function get_user_rates($link, $user_id)
+{
     $result = [];
     $sql_user_rates =
         "SELECT l.lot_id, l.title AS lot_title, l.completion_date AS lot_completion_date, MAX(rate) AS rate, MAX(r.date) AS date_add, l.winner_id, l.image, l.author_id AS author_id, c.name AS category, u.contact_information AS contacts
@@ -375,7 +386,8 @@ function get_user_rates($link, $user_id) {
  * @return string Время до окончания торгов либо указание на то, что торги закончены
  */
 
-function get_time_of_end_lot ($time) {
+function get_time_of_end_lot($time)
+{
     $completion_time = strtotime($time);
 
     $seconds = $completion_time - time();
@@ -387,9 +399,9 @@ function get_time_of_end_lot ($time) {
 
     if ($seconds <= 0) {
         $result = 'Торги окончены';
-    } else if ($days === 0) {
+    } elseif ($days === 0) {
         $result = sprintf('%02d:%02d', $hours, $minutes);
-    } else if ($days <= 7) {
+    } elseif ($days <= 7) {
         $result = sprintf('%d %s', $days, set_format_phrase($days, 'day'));
     }
     return $result;
@@ -403,7 +415,8 @@ function get_time_of_end_lot ($time) {
  * @return array Массив записей из базы данных для пользователя, являющегося победителем торгов
  */
 
-function get_winner($link, $user) {
+function get_winner($link, $user)
+{
     $result = [];
     $sql = '';
 
@@ -418,5 +431,3 @@ function get_winner($link, $user) {
     }
     return $result;
 }
-
-?>

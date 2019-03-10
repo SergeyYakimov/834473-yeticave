@@ -5,4 +5,3 @@ $db = [
     'password' => '',
     'database' => 'yeticave_834473'
 ];
-?>

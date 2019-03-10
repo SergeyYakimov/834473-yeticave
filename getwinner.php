@@ -29,9 +29,9 @@ if (!empty($lots)) {
 
         if ($winner_id !== 0) {
             $sql_winner_add = "UPDATE lots SET winner_id = $winner_id WHERE lot_id = $lot_id";
-                if (!$query = mysqli_query($link, $sql_winner_add)) {
-                    die('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
-                }
+            if (!$query = mysqli_query($link, $sql_winner_add)) {
+                die('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
+            }
 
             $winner = get_winner($link, ['user_id' => $winner_id]);
 
@@ -39,7 +39,7 @@ if (!empty($lots)) {
             $message->setFrom('keks@phpdemo.ru', 'YetiCave');
             $message->setTo([$winner['email'] => htmlspecialchars($winner['name'])]);
 
-            $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+            $protocol = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === true ? 'https://' : 'http://';
             $name_server = $_SERVER['SERVER_NAME'];
 
             $email_content = include_template('email.php', ['lot' => $lot, 'winner' => $winner, 'protocol' => $protocol, 'name_server' => $name_server]);

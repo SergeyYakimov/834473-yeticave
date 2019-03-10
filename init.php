@@ -30,5 +30,3 @@ $result_categories = mysqli_query($link, $sql_categories);
 if ($result_categories) {
     $categories = mysqli_fetch_all($result_categories, MYSQLI_ASSOC);
 }
-
-?>

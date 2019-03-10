@@ -25,7 +25,7 @@
         <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
 
         <nav class="user-menu">
-        <?php if(!empty($user)): ?>
+        <?php if (!empty($user)): ?>
             <div class="user-menu__image">
                 <img src="../<?=empty($user['avatar']) ? 'img/user.jpg' : $user['avatar']; ?>" width="40" height="40" alt="Пользователь">
             </div>
