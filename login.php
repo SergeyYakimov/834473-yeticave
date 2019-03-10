@@ -1,7 +1,7 @@
 <?php
 require_once('init.php');
 
-if(!empty($user)) {
+if (!empty($user)) {
     header("Location: /");
     die();
 }
@@ -16,8 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($keys as $key) {
         if (isset($_POST[$key]) && !empty(trim($_POST[$key]))) {
             $information[$key] = trim($_POST[$key]);
-        }
-        else {
+        } else {
             $errors[$key] = 'Это поле необходимо заполнить';
         }
     }
@@ -25,8 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($errors['email'])) {
         if (!filter_var($information['email'], FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'Некорректный формат адреса электронной почты';
-        }
-        else {
+        } else {
             $user_information = identify_user($link, ['email' => mysqli_real_escape_string($link, $information['email'])]);
         }
     }
@@ -34,13 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($errors['password'])) {
         if (!empty($user_information) && password_verify($information['password'], $user_information['password'])) {
             $user = $user_information;
-        }
-        else {
+        } else {
             $errors['password'] = 'Вы ввели неверный пароль';
         }
     }
 
-    if(empty($errors)) {
+    if (empty($errors)) {
         $_SESSION['user'] = $user;
         header("Location: /");
         die();
@@ -50,4 +47,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $page_content = include_template('login.php', ['errors' => $errors, 'information' => $information]);
 $layout_content = include_template('layout.php', ['name_page' => 'Вход', 'content' => $page_content, 'user' => $user,'categories' => $categories,'is_main_page' => $is_main_page]);
 print($layout_content);
-?>

@@ -66,9 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors['cost'])) {
         if (!ctype_digit($information['cost']) || $information['cost'] <= 0) {
             $errors['cost'] = 'Ставка должна быть целым положительным числом';
-        } else if ($information['cost'] < $lot['price'] + $lot['step_rate']) {
+        } elseif ($information['cost'] < $lot['price'] + $lot['step_rate']) {
             $errors['cost'] = 'Ставка должна быть не меньше минимально возможной';
-        } else if ($information['cost'] - $lot['price'] > $max_step_rate) {
+        } elseif ($information['cost'] - $lot['price'] > $max_step_rate) {
             $errors['cost'] = 'Ставка слишком большая. Максимальный шаг ставки - ' . $max_step_rate . ' р';
         }
     }
@@ -93,4 +93,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $page_content = include_template('lot.php', ['lot' => $lot, 'user' => $user, 'errors' => $errors, 'information' => $information, 'rates' => $rates, 'show_add_rate_form' => $show_add_rate_form]);
 $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => $lot['title'], 'user' => $user, 'is_main_page' => $is_main_page]);
 print($layout_content);
-?>

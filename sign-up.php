@@ -1,7 +1,7 @@
 <?php
 require_once('init.php');
 
-if(!empty($user)) {
+if (!empty($user)) {
     header("Location: /");
     die();
 }
@@ -22,8 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($keys as $key) {
         if (isset($_POST[$key]) && !empty(trim($_POST[$key]))) {
             $information[$key] = trim($_POST[$key]);
-        }
-        else {
+        } else {
             $errors[$key] = 'Это поле необходимо заполнить';
         }
     }
@@ -31,8 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($errors['email'])) {
         if (!filter_var($information['email'], FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'Некорректный формат адреса электронной почты';
-        }
-        else if (is_registered_email($link, mysqli_real_escape_string($link, $information['email']))) {
+        } elseif (is_registered_email($link, mysqli_real_escape_string($link, $information['email']))) {
             $errors['email'] = 'Пользователь с указанным e-mail уже зарегистрирован';
         }
     }
@@ -40,8 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($errors['password'])) {
         if (strlen($information['password']) < $min_length_password) {
             $errors['password'] = 'Минимальная длина пароля - ' . $min_length_password . ' символов';
-        }
-        else if (strlen($information['password']) > $max_length_password) {
+        } elseif (strlen($information['password']) > $max_length_password) {
             $errors['password'] = 'Максимальная длина пароля - ' . $max_length_password . ' символов';
         }
     }
@@ -59,17 +56,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $file_type = mime_content_type($tmp_name);
         if ($file_type !== 'image/png' && $file_type !== 'image/jpeg') {
             $errors['avatar'] = 'Неправильный тип файла. Загрузите файл в правильном формате (jpeg, jpg или png)';
-        }
-        else {
+        } else {
             $file_extension = $file_type === 'image/jpeg' ? '.jpg' : '.png';
             $file_user_name = uniqid('user-') . $file_extension;
         }
     }
 
-    if(empty($errors)) {
+    if (empty($errors)) {
         $information['password'] = password_hash($information['password'], PASSWORD_DEFAULT);
 
-        if(!empty($file_user_name)) {
+        if (!empty($file_user_name)) {
             move_uploaded_file($_FILES['avatar']['tmp_name'], 'avatars/' . $file_user_name);
             $information['avatar'] = 'avatars/' . $file_user_name;
             $add_user = "INSERT INTO users (email, name, password, avatar, contact_information) VALUES (?, ?, ?, ?, ?)";
@@ -102,4 +98,3 @@ $page_content = include_template('sign-up.php', [
 ]);
 $layout_content = include_template('layout.php', ['content' => $page_content, 'categories' => $categories, 'name_page' => 'Регистрация', 'user' => $user, 'is_main_page' => $is_main_page]);
 print($layout_content);
-?>
