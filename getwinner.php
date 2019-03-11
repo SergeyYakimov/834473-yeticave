@@ -21,13 +21,13 @@ if (!empty($lots)) {
     foreach ($lots as $lot) {
         $lot_id = $lot['lot_id'];
         $rates = get_rates($link, $lot_id);
-        $winner_id = 0;
+        $winner_id = $lot['author_id'];
 
         if (!empty($rates)) {
             $winner_id = $rates[0]['user_id'];
         }
 
-        if ($winner_id !== 0) {
+        if ($winner_id !== $lot['author_id']) {
             $sql_winner_add = "UPDATE lots SET winner_id = $winner_id WHERE lot_id = $lot_id";
             if (!$query = mysqli_query($link, $sql_winner_add)) {
                 die('Произошла ошибка. Пожалуйста, попробуйте еще раз.');
