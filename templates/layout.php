@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title><?=$name_page; ?></title>
-    <link href="../css/normalize.min.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="css/normalize.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
 <div class="page-wrapper">
@@ -13,7 +13,7 @@
     <div class="main-header__container container">
         <h1 class="visually-hidden">YetiCave</h1>
         <a class="main-header__logo" <?=$is_main_page ? '' : ' href="/"'; ?>>
-            <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
+            <img src="img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
         </a>
         <form class="main-header__search" method="get" action="search.php">
             <?php if (!empty($present_category)): ?>
@@ -27,7 +27,7 @@
         <nav class="user-menu">
         <?php if (!empty($user)): ?>
             <div class="user-menu__image">
-                <img src="../<?=empty($user['avatar']) ? 'img/user.jpg' : $user['avatar']; ?>" width="40" height="40" alt="Пользователь">
+                <img src="<?=empty($user['avatar']) ? 'img/user.jpg' : $user['avatar']; ?>" width="40" height="40" alt="Пользователь">
             </div>
             <div class="user-menu__logged">
                 <p><?=htmlspecialchars($user['name']); ?></p>

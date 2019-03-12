@@ -6,7 +6,7 @@ $start_rate = $_POST['lot-rate'] ?? '';
 $step = $_POST['lot-step'] ?? '';
 $date = $_POST['lot-date'] ?? '';
 ?>
-<form class="form form--add-lot container <?=($errors) ? "form--invalid" : "";?>" enctype="multipart/form-data" action="../add.php" method="post">
+<form class="form form--add-lot container <?=($errors) ? "form--invalid" : "";?>" enctype="multipart/form-data" action="add.php" method="post">
     <h2>Добавление лота</h2>
     <div class="form__container-two">
         <div class="form__item <?=!isset($errors['lot-name']) ? '' : ' form__item--invalid'; ?>">
@@ -81,7 +81,7 @@ $date = $_POST['lot-date'] ?? '';
           <label for="lot-date">Дата окончания торгов</label>
           <input class="form__input-date" id="lot-date" type="date" name="lot-date" value="<?=$date;?>" required>
           <?php if (isset($errors['lot-date'])):?>
-          <span class="form__error">Введите дату завершения торгов</span>
+          <span class="form__error"><?=$errors['lot-date']; ?></span>
           <?php endif; ?>
         </div>
     </div>

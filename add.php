@@ -77,8 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors['lot-date'])) {
-        if (($lot['lot-date']) !== date('Y-m-d', strtotime($lot['lot-date'])) || strtotime($lot['lot-date']) < strtotime('tomorrow')) {
-            $errors['lot-date'] = 'Введите корректную дату завершения торгов, которая позже текущей даты хотя бы на один день';
+        if (($lot['lot-date'] !== date('d.m.Y', strtotime($lot['lot-date']))) && ($lot['lot-date'] !== date('Y-m-d', strtotime($lot['lot-date'])))) {
+            $errors['lot-date'] = 'Введите корректную дату завершения торгов в формате ДД.ММ.ГГГГ или ГГГГ-ММ-ДД';
+        } elseif (strtotime($lot['lot-date']) < strtotime('tomorrow')) {
+            $errors['lot-date'] = 'Введите дату завершения торгов, которая позже текущей даты хотя бы на один день';
         }
     }
 
@@ -98,6 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file_name = uniqid('lot-' . $user['user_id'] . '-') . $file_extension;
         move_uploaded_file($_FILES['lot_img']['tmp_name'], 'img/' . $file_name);
         $lot['lot_img'] = 'img/' . $file_name;
+
+        if ($lot['lot-date'] === date('d.m.Y', strtotime($lot['lot-date']))) {
+            $lot['lot-date'] = date('Y-m-d', strtotime($lot['lot-date']));
+        }
 
 
         $stmt = db_get_prepare_stmt($link, $add, [

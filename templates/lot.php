@@ -1,15 +1,14 @@
 <section class="lot-item container">
-    <h2><?=$lot['title']; ?></h2>
+    <h2><?=htmlspecialchars($lot['title']); ?></h2>
     <div class="lot-item__content">
         <div class="lot-item__left">
           <div class="lot-item__image">
-            <img src="../<?=$lot['image']; ?>" width="730" height="548" alt="">
+            <img src="<?=$lot['image']; ?>" width="730" height="548" alt="">
           </div>
           <p class="lot-item__category">Категория: <span><?=$lot['name']; ?></span></p>
-          <p class="lot-item__description"><?=$lot['description']; ?></p>
+          <p class="lot-item__description"><?=htmlspecialchars($lot['description']); ?></p>
         </div>
         <div class="lot-item__right">
-          <?php if (!empty($user)): ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
                 <?=get_time_till_closing_time($lot['completion_date']); ?>
@@ -23,7 +22,7 @@
                 Мин. ставка <span><?=format_price($lot['step_rate'] + $lot['price']); ?></span>
               </div>
             </div>
-            <?php if ($show_add_rate_form): ?>
+            <?php if (!empty($user) && $show_add_rate_form): ?>
                 <form class="lot-item__form" action="lot.php?id=<?=$lot['lot_id']; ?>" method="post">
                     <p class="lot-item__form-item form__item<?=!isset($errors['cost']) ? '' : ' form__item--invalid'; ?>">
                         <label for="cost">Ваша ставка</label>
@@ -48,7 +47,6 @@
                 </table>
                 <?php endif; ?>
           </div>
-          <?php endif;?>
         </div>
       </div>
 </section>

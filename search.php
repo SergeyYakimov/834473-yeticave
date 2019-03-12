@@ -15,6 +15,7 @@ if (!isset($_GET['search']) || empty(trim($_GET['search']))) {
     die();
 }
 
+$category = [];
 $category_id = 0;
 $search['text'] = trim($_GET['search']);
 if (isset($_GET['category'])) {
